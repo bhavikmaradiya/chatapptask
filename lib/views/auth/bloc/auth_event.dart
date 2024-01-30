@@ -24,3 +24,14 @@ class VerifyCredentialEvent extends AuthEvent {
 class VisiblePasswordFieldEvent extends AuthEvent {}
 
 class InVisiblePasswordFieldEvent extends AuthEvent {}
+
+class CreateFirebaseUserEvent extends AuthEvent {
+  final String email;
+  final String password;
+
+  CreateFirebaseUserEvent(this.email, this.password);
+}
+
+class GoogleSignInEvent extends AuthEvent {
+  GoogleSignInEvent();
+}

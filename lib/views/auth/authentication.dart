@@ -1,4 +1,4 @@
-import 'package:chatapp/config/app_config.dart';
+import 'package:chatapp/const/assets.dart';
 import 'package:chatapp/const/dimens.dart';
 import 'package:chatapp/enums/color_enums.dart';
 import 'package:chatapp/routes.dart';
@@ -36,7 +36,21 @@ class Authentication extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                _welcomeWidget(
+                  context,
+                  appLocalizations,
+                ),
+                SizedBox(
+                  height: Dimens.dimens_25.h,
+                ),
                 _loginContentWidget(
+                  context,
+                  appLocalizations,
+                ),
+                SizedBox(
+                  height: Dimens.dimens_25.h,
+                ),
+                _otherContent(
                   context,
                   appLocalizations,
                 ),
@@ -45,6 +59,90 @@ class Authentication extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _googleSignButton(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+  ) {
+    return OutlinedButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              Dimens.dimens_7.r,
+            ),
+          ),
+        ),
+      ),
+      onPressed: () async {
+        final authBlocProvider = BlocProvider.of<AuthBloc>(context);
+        authBlocProvider.add(GoogleSignInEvent());
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: Dimens.dimens_10.h,
+          horizontal: Dimens.dimens_15.w,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              Assets.googleLogo,
+              height: Dimens.dimens_27.h,
+              width: Dimens.dimens_27.h,
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: Dimens.dimens_10.w,
+              ),
+              child: Text(
+                appLocalizations.googleSignIn,
+                style: TextStyle(
+                  fontSize: Dimens.dimens_18.sp,
+                  color: ColorUtils.getColor(
+                    context,
+                    ColorEnums.black1AColor,
+                  ),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _otherContent(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+  ) {
+    return Column(
+      children: [
+        Text(
+          appLocalizations.or,
+          style: TextStyle(
+            fontSize: Dimens.dimens_16.sp,
+            color: ColorUtils.getColor(
+              context,
+              ColorEnums.gray6CColor,
+            ),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(
+          height: Dimens.dimens_12.h,
+        ),
+        _googleSignButton(
+          context,
+          appLocalizations,
+        ),
+      ],
     );
   }
 
@@ -206,7 +304,7 @@ class Authentication extends StatelessWidget {
                   AppUtils.isValidPasswordToRegister(password);
               return AppFilledButton(
                 title: appLocalizations.loginBtn,
-                // enabled: isValid,
+                enabled: isValid,
                 onButtonPressed: () {
                   _onLoginButtonClicked(
                     authBlocProvider,
@@ -214,6 +312,58 @@ class Authentication extends StatelessWidget {
                 },
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _welcomeWidget(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+  ) {
+    return Container(
+      width: double.infinity,
+      height: Dimens.dimens_342.h,
+      color: ColorUtils.getColor(
+        context,
+        ColorEnums.grayF5Color,
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: Dimens.dimens_25.h,
+          ),
+          Image.asset(
+            Assets.loginBanner,
+            width: Dimens.dimens_175.w,
+            height: Dimens.dimens_175.h,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(
+            height: Dimens.dimens_20.h,
+          ),
+          Text(
+            appLocalizations.welcome,
+            style: TextStyle(
+              fontSize: Dimens.dimens_36.sp,
+              fontWeight: FontWeight.w700,
+              color: ColorUtils.getColor(
+                context,
+                ColorEnums.black1AColor,
+              ),
+            ),
+          ),
+          Text(
+            appLocalizations.gladToSeeYou,
+            style: TextStyle(
+              fontSize: Dimens.dimens_26.sp,
+              fontWeight: FontWeight.w500,
+              color: ColorUtils.getColor(
+                context,
+                ColorEnums.gray6CColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -307,12 +457,13 @@ class Authentication extends StatelessWidget {
     }
   }
 
-  void _createNewUserDialog(
+  Future<void> _createNewUserDialog(
     BuildContext context,
     AuthState state,
     AppLocalizations appLocalizations,
-  ) {
-    final shouldCreate = showModalBottomSheet<bool>(
+  ) async {
+    final authBlocProvider = BlocProvider.of<AuthBloc>(context);
+    final shouldCreate = await showModalBottomSheet<bool?>(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
@@ -393,12 +544,22 @@ class Authentication extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
         );
       },
     );
+    if (shouldCreate ?? false) {
+      final email = _emailTextEditingController.text.trim();
+      final password = _passwordTextEditingController.text;
+      authBlocProvider.add(
+        CreateFirebaseUserEvent(
+          email,
+          password,
+        ),
+      );
+    }
   }
 }

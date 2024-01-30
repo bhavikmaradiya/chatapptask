@@ -2,6 +2,7 @@ class Dimens {
   static const double dimens_1 = 1;
   static const double dimens_2 = 2;
   static const double dimens_5 = 5;
+  static const double dimens_7 = 7;
   static const double dimens_10 = 10;
   static const double dimens_12 = 12;
   static const double dimens_14 = 14;
@@ -14,8 +15,15 @@ class Dimens {
   static const double dimens_22 = 22;
   static const double dimens_24 = 24;
   static const double dimens_25 = 25;
+  static const double dimens_26 = 26;
+  static const double dimens_27 = 27;
+  static const double dimens_28 = 28;
   static const double dimens_30 = 30;
   static const double dimens_35 = 35;
   static const double dimens_50 = 50;
   static const double dimens_60 = 60;
+  static const double dimens_342 = 342;
+  static const double dimens_36 = 36;
+  static const double dimens_170 = 170;
+  static const double dimens_175 = 175;
 }
