@@ -1,0 +1,15 @@
+{
+"login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "invalidEmail": "Please enter valid email",
+  "invalidPasswordLength": "Please enter valid password",
+  "loginBtn": "Login",
+  "invalidFirebasePassword": "Invalid email or password, Please check your credentials",
+  "somethingWentWrong": "Something went wrong, Please try again!",
+  "userNotFoundTitle": "Ahh! Unable to find user",
+  "userNotFoundSubtitle": "Would you like to continue while creating new user using above credentials?",
+  "cancel": "Cancel",
+  "createAc": "Yes, continue",
+ "passwordHint": "Password must contain 1 uppercase letter, 1 lowercase letter, 1 special character, 1 number, min 6 characters and Max 10 characters"
+  }
