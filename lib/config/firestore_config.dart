@@ -4,6 +4,7 @@ class FireStoreConfig {
   static const userIdField = 'userId';
   static const userNameField = 'name';
   static const userEmailField = 'email';
+  static const userPhotoField = 'photo';
   static const userRoleField = 'role';
   static const userFcmTokenField = 'fcmToken';
 

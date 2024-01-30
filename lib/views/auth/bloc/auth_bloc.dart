@@ -9,7 +9,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -108,6 +107,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ProfileInfo(
             userId: firebaseUserId,
             email: email,
+            name: userCredentials.user?.displayName,
+            photo: userCredentials.user?.photoURL,
           ),
         );
         emit(FirebaseLoginSuccessProfileState());
@@ -180,6 +181,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await prefs.setString(
       PreferenceConfig.userEmailPref,
       profileInfo.email ?? '',
+    );
+    await prefs.setString(
+      PreferenceConfig.userPhotoPref,
+      profileInfo.photo ?? '',
     );
   }
 }

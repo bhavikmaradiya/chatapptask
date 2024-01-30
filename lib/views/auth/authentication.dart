@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication extends StatelessWidget {
   final _emailTextEditingController = TextEditingController();
@@ -80,6 +81,10 @@ class Authentication extends StatelessWidget {
       ),
       onPressed: () async {
         final authBlocProvider = BlocProvider.of<AuthBloc>(context);
+        final googleSignIn = GoogleSignIn();
+        if (await googleSignIn.isSignedIn()) {
+          await googleSignIn.signOut();
+        }
         authBlocProvider.add(GoogleSignInEvent());
       },
       child: Padding(

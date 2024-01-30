@@ -5,6 +5,7 @@ class ProfileInfo {
   String? userId;
   String? name;
   String? email;
+  String? photo;
   List<String>? fcmTokens;
   int? createdAt;
   int? updatedAt;
@@ -12,6 +13,7 @@ class ProfileInfo {
   ProfileInfo({
     this.userId,
     this.name,
+    this.photo,
     this.email,
     this.fcmTokens,
     this.createdAt,
@@ -40,6 +42,7 @@ class ProfileInfo {
       userId: data[FireStoreConfig.userIdField] as String?,
       name: data[FireStoreConfig.userNameField] as String?,
       email: data[FireStoreConfig.userEmailField] as String?,
+      photo: data[FireStoreConfig.userPhotoField] as String?,
       fcmTokens: fcmToken,
       createdAt: data[FireStoreConfig.createdAtField] as int?,
       updatedAt: data[FireStoreConfig.updatedAtField] as int?,
@@ -51,6 +54,7 @@ class ProfileInfo {
       FireStoreConfig.userIdField: userId,
       FireStoreConfig.userNameField: name,
       FireStoreConfig.userEmailField: email,
+      FireStoreConfig.userPhotoField: photo,
       FireStoreConfig.userFcmTokenField: fcmTokens,
       FireStoreConfig.createdAtField: createdAt,
       FireStoreConfig.updatedAtField: updatedAt,
