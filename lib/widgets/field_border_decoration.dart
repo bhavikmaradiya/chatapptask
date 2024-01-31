@@ -8,12 +8,14 @@ class FieldBorderDecoration {
   static InputDecoration fieldBorderDecoration(
     BuildContext context, {
     double contentPadding = 0,
+    double? borderRadius,
     ColorEnums fillColor = ColorEnums.whiteColor,
     ColorEnums borderColor = ColorEnums.grayE0Color,
     bool isMultiLine = false,
     Widget? suffixIcon,
     String? hint,
     TextStyle? hintStyle,
+        double? borderWidth,
   }) {
     return InputDecoration(
       hintText: hint,
@@ -25,10 +27,14 @@ class FieldBorderDecoration {
       enabledBorder: _fieldBorder(
         context,
         borderColor: borderColor,
+        borderRadius: borderRadius,
+        borderWidth: borderWidth,
       ),
       disabledBorder: _fieldBorder(
         context,
         borderColor: borderColor,
+        borderRadius: borderRadius,
+        borderWidth: borderWidth,
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
@@ -51,11 +57,13 @@ class FieldBorderDecoration {
   static OutlineInputBorder _fieldBorder(
     BuildContext context, {
     ColorEnums borderColor = ColorEnums.grayE0Color,
+    double? borderRadius,
+    double? borderWidth,
   }) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(
-          Dimens.dimens_5.r,
+          borderRadius ?? Dimens.dimens_5.r,
         ),
       ),
       borderSide: BorderSide(
@@ -63,7 +71,7 @@ class FieldBorderDecoration {
           context,
           borderColor,
         ),
-        width: Dimens.dimens_1.w,
+        width: borderWidth ?? Dimens.dimens_1.w,
       ),
     );
   }

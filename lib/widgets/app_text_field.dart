@@ -20,6 +20,7 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool isMultiLine;
   final double maxLine;
+  final double? borderRadius;
   final bool isReadOnly;
   final bool isEnabled;
   final List<TextInputFormatter>? inputFormatter;
@@ -27,13 +28,15 @@ class AppTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final ColorEnums? fieldBgColor;
   final FocusNode? focusNode;
+  final double? borderWidth;
 
   const AppTextField({
-    required this.title,
     required this.onTextChange,
+    this.title,
     super.key,
     this.textEditingController,
     this.keyboardType,
+    this.borderRadius,
     this.keyboardAction,
     this.autoFocus = false,
     this.isPassword = false,
@@ -47,6 +50,7 @@ class AppTextField extends StatelessWidget {
     this.fieldBgColor,
     this.focusNode,
     this.isEnabled = true,
+    this.borderWidth,
   });
 
   @override
@@ -55,9 +59,10 @@ class AppTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null) FieldTitle(title: title!),
-        SizedBox(
-          height: Dimens.dimens_10.h,
-        ),
+        if (title != null)
+          SizedBox(
+            height: Dimens.dimens_10.h,
+          ),
         SizedBox(
           height:
               isMultiLine ? (Dimens.dimens_50 * maxLine).h : Dimens.dimens_50.h,
@@ -122,6 +127,8 @@ class AppTextField extends StatelessWidget {
                 isMultiLine: isMultiLine,
                 suffixIcon: suffixIcon,
                 hint: hint,
+                borderWidth: borderWidth,
+                borderRadius: borderRadius,
                 hintStyle: hintStyle,
                 fillColor: isEnabled
                     ? (fieldBgColor ?? ColorEnums.whiteColor)
