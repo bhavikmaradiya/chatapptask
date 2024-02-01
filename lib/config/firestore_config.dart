@@ -8,6 +8,20 @@ class FireStoreConfig {
   static const userRoleField = 'role';
   static const userFcmTokenField = 'fcmToken';
 
+  //room collection
+  static const roomCollection = 'rooms';
+  static const roomIdField = 'roomId';
+  static const roomNameField = 'name';
+  static const roomTypeField = 'type';
+  static const roomImageField = 'image';
+  static const roomMembersField = 'members';
+
+  //member
+  static const memberIdField = 'memberId';
+  static const memberStatusField = 'status';
+  static const memberAdminField = 'isAdmin';
+  static const memberJoinedAtField = 'joinedAt';
+
   // General
   static const createdAtField = 'createdAt';
   static const updatedAtField = 'updatedAt';

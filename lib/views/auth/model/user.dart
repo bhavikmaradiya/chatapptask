@@ -1,7 +1,7 @@
 import 'package:chatapp/config/firestore_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfileInfo {
+class User {
   String? userId;
   String? name;
   String? email;
@@ -10,7 +10,7 @@ class ProfileInfo {
   int? createdAt;
   int? updatedAt;
 
-  ProfileInfo({
+  User({
     this.userId,
     this.name,
     this.photo,
@@ -20,7 +20,7 @@ class ProfileInfo {
     this.updatedAt,
   });
 
-  factory ProfileInfo.fromSnapshot(DocumentSnapshot document) {
+  factory User.fromSnapshot(DocumentSnapshot document) {
     final data = document.data();
     if (data == null || data is! Map<String, dynamic>) {
       throw Exception();
@@ -38,7 +38,7 @@ class ProfileInfo {
       }
     }
 
-    return ProfileInfo(
+    return User(
       userId: data[FireStoreConfig.userIdField] as String?,
       name: data[FireStoreConfig.userNameField] as String?,
       email: data[FireStoreConfig.userEmailField] as String?,

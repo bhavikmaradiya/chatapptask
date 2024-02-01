@@ -1,9 +1,9 @@
 import 'package:chatapp/config/firestore_config.dart';
 import 'package:chatapp/config/preference_config.dart';
 import 'package:chatapp/utils/app_utils.dart';
-import 'package:chatapp/views/auth/model/profile_info.dart';
+import 'package:chatapp/views/auth/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +12,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final _firebaseAuthInstance = FirebaseAuth.instance;
+  final _firebaseAuthInstance = auth.FirebaseAuth.instance;
 
   AuthBloc() : super(AuthInitialState()) {
     on<EmailFieldTextChangeEvent>(_onEmailIdFieldTextChange);
@@ -34,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
+      final credential = auth.GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
@@ -42,7 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final userCredential =
             await _firebaseAuthInstance.signInWithCredential(credential);
         await _fetchFirebaseProfileInfo(emit, userCredential);
-      } on FirebaseAuthException catch (e) {
+      } on auth.FirebaseAuthException catch (e) {
         emit(FirebaseLoginFailedState(e.message));
       } catch (e) {
         emit(FirebaseLoginFailedState(null));
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       await _fetchFirebaseProfileInfo(emit, userCredentials);
-    } on FirebaseAuthException catch (ex) {
+    } on auth.FirebaseAuthException catch (ex) {
       if (ex.code == 'user-not-found' || ex.code == 'invalid-credential') {
         emit(FirebaseLoginInvalidUserState());
       } else if (ex.code == 'wrong-password') {
@@ -86,14 +86,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
       await _fetchFirebaseProfileInfo(emit, userCredentials);
-    } on FirebaseAuthException catch (ex) {
+    } on auth.FirebaseAuthException catch (ex) {
       emit(FirebaseLoginFailedState(ex.message));
     }
   }
 
   Future<void> _fetchFirebaseProfileInfo(
     Emitter<AuthState> emit,
-    UserCredential userCredentials,
+    auth.UserCredential userCredentials,
   ) async {
     if (userCredentials.user != null) {
       final firebaseUserId = userCredentials.user!.uid;
@@ -104,7 +104,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(FirebaseLoginSuccessHomeState());
       } else {
         await _saveProfileInfo(
-          ProfileInfo(
+          User(
             userId: firebaseUserId,
             email: email,
             name: userCredentials.user?.displayName,
@@ -118,16 +118,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<ProfileInfo?> _fetchProfileInfoFromFirebase(
+  Future<User?> _fetchProfileInfoFromFirebase(
     String firebaseUserId,
   ) async {
     final user = await FirebaseFirestore.instance
         .collection(FireStoreConfig.userCollection)
         .doc(firebaseUserId)
         .get();
-    ProfileInfo? profileInfo;
+    User? profileInfo;
     try {
-      profileInfo = ProfileInfo.fromSnapshot(user);
+      profileInfo = User.fromSnapshot(user);
     } on Exception catch (_) {}
     return profileInfo;
   }
@@ -168,7 +168,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(InVisiblePasswordFieldState());
   }
 
-  Future<void> _saveProfileInfo(ProfileInfo profileInfo) async {
+  Future<void> _saveProfileInfo(User profileInfo) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       PreferenceConfig.userIdPref,
