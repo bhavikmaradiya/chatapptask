@@ -44,6 +44,11 @@ class FieldBorderDecoration {
           ),
           width: Dimens.dimens_1.w,
         ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            borderRadius ?? Dimens.dimens_5.r,
+          ),
+        ),
       ),
       contentPadding: EdgeInsets.symmetric(
         horizontal: contentPadding.w,
