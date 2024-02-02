@@ -15,6 +15,7 @@ class FireStoreConfig {
   static const roomTypeField = 'type';
   static const roomImageField = 'image';
   static const roomMembersField = 'members';
+  static const roomMemberIdsField = 'memberIds';
 
   //member
   static const memberIdField = 'memberId';

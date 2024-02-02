@@ -1,7 +1,7 @@
 import 'package:chatapp/views/auth/authentication.dart';
 import 'package:chatapp/views/auth/bloc/auth_bloc.dart';
-import 'package:chatapp/views/home/bloc/home_bloc.dart';
 import 'package:chatapp/views/home/home.dart';
+import 'package:chatapp/views/home/home_bloc/home_bloc.dart';
 import 'package:chatapp/views/splash/bloc/splash_bloc.dart';
 import 'package:chatapp/views/splash/splash.dart';
 import 'package:flutter/material.dart';
