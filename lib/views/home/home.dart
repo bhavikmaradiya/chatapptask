@@ -1,15 +1,12 @@
-import 'package:chatapp/config/firestore_config.dart';
-import 'package:chatapp/const/assets.dart';
 import 'package:chatapp/const/dimens.dart';
 import 'package:chatapp/enums/color_enums.dart';
-import 'package:chatapp/enums/room_type_enums.dart';
 import 'package:chatapp/notification/notification_token_helper.dart';
 import 'package:chatapp/utils/color_utils.dart';
 import 'package:chatapp/views/auth/model/room.dart';
 import 'package:chatapp/views/home/home_bloc/home_bloc.dart';
 import 'package:chatapp/views/home/room_bloc/room_bloc.dart';
+import 'package:chatapp/views/home/widget/room_item.dart';
 import 'package:chatapp/widgets/app_text_field.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -117,19 +114,29 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: BlocBuilder<RoomBloc, RoomState>(
                       buildWhen: (prev, current) =>
-                          prev != current && current is RoomListUpdated,
+                          prev != current &&
+                          (current is RoomListEmptyState ||
+                              current is RoomListUpdatedState),
                       builder: (context, state) {
                         var roomList = <Room>[];
-                        if (state is RoomListUpdated && currentUserId != null) {
+                        if (state is RoomListUpdatedState &&
+                            currentUserId != null) {
                           roomList = state.roomList;
+                        }
+                        if (roomList.isEmpty) {
+                          return Container(
+                            color: Colors.green,
+                          );
                         }
                         return ListView.builder(
                           itemCount: roomList.length,
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-
-                            return ;
+                            return RoomItem(
+                              roomInfo: roomList[index],
+                              currentUserId: currentUserId!,
+                            );
                           },
                         );
                       },

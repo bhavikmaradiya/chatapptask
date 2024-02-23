@@ -7,6 +7,7 @@ class Room {
   String? roomType;
   String? roomImage;
   List<Member>? members;
+  List<String>? memberIds;
   int? createdAt;
   int? updatedAt;
 
@@ -14,6 +15,7 @@ class Room {
     this.roomId,
     this.roomName,
     this.roomType,
+    this.memberIds,
     this.roomImage,
     this.members,
     this.createdAt,
@@ -43,12 +45,26 @@ class Room {
       }
     }
 
+    final memberIds = <String>[];
+    final memberIdList = data[FireStoreConfig.roomMemberIdsField];
+    if (memberIdList != null && memberIdList is List<dynamic>) {
+      for (var i = 0; i < memberIdList.length; i++) {
+        final memberId = memberIdList[i];
+        if (memberId != null &&
+            memberId is String &&
+            !memberIds.contains(memberId)) {
+          memberIds.add(memberIdList[i] as String);
+        }
+      }
+    }
+
     return Room(
       roomId: data[FireStoreConfig.roomIdField] as String?,
       roomName: data[FireStoreConfig.roomNameField] as String?,
       roomImage: data[FireStoreConfig.roomImageField] as String?,
       roomType: data[FireStoreConfig.roomTypeField] as String?,
       members: roomMembers,
+      memberIds: memberIds,
       createdAt: data[FireStoreConfig.createdAtField] as int?,
       updatedAt: data[FireStoreConfig.updatedAtField] as int?,
     );
@@ -61,6 +77,7 @@ class Room {
       FireStoreConfig.roomImageField: roomImage,
       FireStoreConfig.roomTypeField: roomType,
       FireStoreConfig.roomMembersField: members?.map((e) => e.toMap()).toList(),
+      FireStoreConfig.roomMemberIdsField: memberIds,
       FireStoreConfig.createdAtField: createdAt,
       FireStoreConfig.updatedAtField: updatedAt,
     };

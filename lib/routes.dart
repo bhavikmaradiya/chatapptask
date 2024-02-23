@@ -24,6 +24,6 @@ class Routes {
         home: (_) => BlocProvider(
               create: (_) => HomeBloc(),
               child: const Home(),
-            )
+            ),
       };
 }

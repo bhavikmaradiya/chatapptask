@@ -188,7 +188,7 @@ class RoomItem extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

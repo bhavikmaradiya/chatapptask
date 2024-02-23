@@ -11,26 +11,42 @@ class NotificationTokenHelper {
   static String? _fcmToken = '';
 
   static Future<void> uploadFcmToken() async {
-    _fcmToken = await FirebaseMessaging.instance.getToken();
-    if (_fcmToken != null) {
-      unawaited(_updateFcmTokenToFirebase());
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken != null) {
+      unawaited(
+        _updateFcmTokenToFirebase(
+          oldToken: _fcmToken,
+          newToken: fcmToken,
+        ),
+      );
     }
   }
 
   static void observeNotificationChange() {
     FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
-      _fcmToken = token;
-      unawaited(_updateFcmTokenToFirebase());
+      unawaited(
+        _updateFcmTokenToFirebase(
+          oldToken: _fcmToken,
+          newToken: token,
+        ),
+      );
     });
   }
 
-  static Future<void> _updateFcmTokenToFirebase() async {
+  static Future<void> _updateFcmTokenToFirebase({
+    required String newToken,
+    String? oldToken,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     final firebaseUserId = prefs.getString(PreferenceConfig.userIdPref);
     if (firebaseUserId != null) {
       final profileInfo = await _fetchProfileInfoFromFirebase(firebaseUserId);
       if (profileInfo != null) {
-        unawaited(_updateFcmToken(profileInfo));
+        unawaited(_updateFcmToken(
+          profileInfo,
+          oldToken: oldToken,
+          newToken: newToken,
+        ));
       }
     }
   }
@@ -60,12 +76,21 @@ class NotificationTokenHelper {
     }
   }
 
-  static Future<void> _updateFcmToken(User profileInfo) async {
+  static Future<void> _updateFcmToken(
+    User profileInfo, {
+    required String newToken,
+    String? oldToken,
+  }) async {
     final data = <String, dynamic>{};
     var tokens = profileInfo.fcmTokens;
     tokens ??= [];
-    if (!tokens.contains(_fcmToken)) {
-      tokens.add(_fcmToken!);
+    if (oldToken != null &&
+        oldToken.trim().isNotEmpty &&
+        tokens.contains(oldToken)) {
+      tokens.remove(oldToken);
+    }
+    if (!tokens.contains(newToken)) {
+      tokens.add(newToken);
       data[FireStoreConfig.userFcmTokenField] = tokens;
       data[FireStoreConfig.updatedAtField] =
           DateTime.now().millisecondsSinceEpoch;
@@ -74,5 +99,6 @@ class NotificationTokenHelper {
           .doc(profileInfo.userId)
           .update(data);
     }
+    _fcmToken = newToken;
   }
 }

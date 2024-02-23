@@ -2,10 +2,18 @@ part of 'room_bloc.dart';
 
 abstract class RoomState {}
 
-class RoomInitial extends RoomState {}
+class RoomInitialState extends RoomState {}
 
-class RoomListUpdated extends RoomState {
+class RoomListUpdatedState extends RoomState {
   final List<Room> roomList;
 
-  RoomListUpdated(this.roomList);
+  RoomListUpdatedState(this.roomList);
+}
+
+class RoomLoadingState extends RoomState {
+  RoomLoadingState();
+}
+
+class RoomListEmptyState extends RoomState {
+  RoomListEmptyState();
 }
