@@ -3,4 +3,5 @@ class PreferenceConfig {
   static const userNamePref = 'userNamePref';
   static const userEmailPref = 'userEmailPref';
   static const userPhotoPref = 'userPhotoPref';
+  static const isFirstSignInPref = 'isUserFirstSignIn';
 }

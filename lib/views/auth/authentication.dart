@@ -455,8 +455,7 @@ class Authentication extends StatelessWidget {
         state.errorMessage ?? appLocalizations.somethingWentWrong,
       );
     } else if (state is FirebaseLoginSuccessProfileState) {
-      // success
-      Navigator.pushReplacementNamed(context, Routes.home);
+      Navigator.pushReplacementNamed(context, Routes.profile);
     } else if (state is FirebaseLoginSuccessHomeState) {
       Navigator.pushReplacementNamed(context, Routes.home);
     }

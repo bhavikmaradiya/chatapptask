@@ -109,4 +109,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     final preference = await SharedPreferences.getInstance();
     return preference.getString(PreferenceConfig.userIdPref);
   }
+
+  @override
+  Future<void> close() {
+    _roomListSubscription?.cancel();
+    return super.close();
+  }
 }

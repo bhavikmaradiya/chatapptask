@@ -36,7 +36,7 @@ class RoomItem extends StatelessWidget {
     final roomImage = roomInfo.roomImage;
 
     if (isOneToOne && receiverId != null) {
-      StreamBuilder(
+      return StreamBuilder(
         stream: roomBlocProvider.buildStreamOfUser(receiverId),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
@@ -91,7 +91,8 @@ class RoomItem extends StatelessWidget {
                       fit: BoxFit.cover,
                     );
                   },
-                  loadingBuilder: (context, _, __) {
+                  loadingBuilder: (context, _, loadingProgress) {
+                    if (loadingProgress == null) return _;
                     return Image.asset(
                       Assets.userPlaceholder,
                       fit: BoxFit.cover,

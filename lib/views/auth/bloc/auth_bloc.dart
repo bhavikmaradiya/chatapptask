@@ -9,10 +9,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final _firebaseAuthInstance = auth.FirebaseAuth.instance;
+  final _fireStoreInstance = FirebaseFirestore.instance;
 
   AuthBloc() : super(AuthInitialState()) {
     on<EmailFieldTextChangeEvent>(_onEmailIdFieldTextChange);
@@ -100,16 +102,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final email = userCredentials.user!.email;
       final profileInfo = await _fetchProfileInfoFromFirebase(firebaseUserId);
       if (profileInfo != null) {
-        await _saveProfileInfo(profileInfo);
+        await _saveProfileInfo(profileInfo: profileInfo);
         emit(FirebaseLoginSuccessHomeState());
       } else {
         await _saveProfileInfo(
-          User(
+          profileInfo: User(
             userId: firebaseUserId,
             email: email,
             name: userCredentials.user?.displayName,
             photo: userCredentials.user?.photoURL,
           ),
+          isFirstLogin: true,
         );
         emit(FirebaseLoginSuccessProfileState());
       }
@@ -121,7 +124,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<User?> _fetchProfileInfoFromFirebase(
     String firebaseUserId,
   ) async {
-    final user = await FirebaseFirestore.instance
+    final user = await _fireStoreInstance
         .collection(FireStoreConfig.userCollection)
         .doc(firebaseUserId)
         .get();
@@ -168,7 +171,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(InVisiblePasswordFieldState());
   }
 
-  Future<void> _saveProfileInfo(User profileInfo) async {
+  Future<void> _saveProfileInfo({
+    required User profileInfo,
+    bool isFirstLogin = false,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       PreferenceConfig.userIdPref,
@@ -185,6 +191,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await prefs.setString(
       PreferenceConfig.userPhotoPref,
       profileInfo.photo ?? '',
+    );
+    await prefs.setBool(
+      PreferenceConfig.isFirstSignInPref,
+      isFirstLogin,
     );
   }
 }

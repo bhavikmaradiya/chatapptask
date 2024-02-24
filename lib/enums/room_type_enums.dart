@@ -1,4 +1,4 @@
-enum RoomTypeEnum{
+enum RoomTypeEnum {
   oneToOne,
-  oneToMany
+  oneToMany,
 }

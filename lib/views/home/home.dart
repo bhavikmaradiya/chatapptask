@@ -116,16 +116,20 @@ class _HomeState extends State<Home> {
                       buildWhen: (prev, current) =>
                           prev != current &&
                           (current is RoomListEmptyState ||
+                              current is RoomLoadingState ||
                               current is RoomListUpdatedState),
                       builder: (context, state) {
                         var roomList = <Room>[];
                         if (state is RoomListUpdatedState &&
                             currentUserId != null) {
                           roomList = state.roomList;
-                        }
-                        if (roomList.isEmpty) {
-                          return Container(
-                            color: Colors.green,
+                        } else if (state is RoomListEmptyState) {
+                          return Center(
+                            child: Text(appLocalizations.noRoomsFound),
+                          );
+                        } else if (state is RoomLoadingState) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
                         }
                         return ListView.builder(

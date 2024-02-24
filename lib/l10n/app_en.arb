@@ -18,5 +18,6 @@
   "or": "OR",
   "googleSignIn": "Sign in with Google",
   "conversation": "Conversations",
-  "searchHint": "Search..."
+  "searchHint": "Search...",
+  "noRoomsFound": "No chat found"
   }
