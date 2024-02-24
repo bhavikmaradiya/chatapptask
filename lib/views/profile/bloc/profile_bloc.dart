@@ -28,7 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileLoadingState());
     final prefs = await SharedPreferences.getInstance();
     final isFirstLogin =
-        prefs.getBool(PreferenceConfig.isFirstSignInPref) ?? false;
+        prefs.getBool(PreferenceConfig.isFirstSignInPref) ?? true;
     User? profileInfo;
     if (!isFirstLogin) {
       profileInfo = await _fetchProfileInfoFromFirebase();

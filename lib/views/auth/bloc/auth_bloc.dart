@@ -102,7 +102,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final email = userCredentials.user!.email;
       final profileInfo = await _fetchProfileInfoFromFirebase(firebaseUserId);
       if (profileInfo != null) {
-        await _saveProfileInfo(profileInfo: profileInfo);
+        await _saveProfileInfo(
+          profileInfo: profileInfo,
+          isFirstLogin: false,
+        );
         emit(FirebaseLoginSuccessHomeState());
       } else {
         await _saveProfileInfo(
@@ -112,7 +115,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             name: userCredentials.user?.displayName,
             photo: userCredentials.user?.photoURL,
           ),
-          isFirstLogin: true,
         );
         emit(FirebaseLoginSuccessProfileState());
       }
@@ -173,7 +175,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _saveProfileInfo({
     required User profileInfo,
-    bool isFirstLogin = false,
+    bool isFirstLogin = true,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'splash_event.dart';
+
 part 'splash_state.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
@@ -26,7 +27,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     if (_firebaseAuth.currentUser != null) {
       final prefs = await SharedPreferences.getInstance();
       final shouldShowProfile =
-          prefs.getBool(PreferenceConfig.isFirstSignInPref) ?? false;
+          prefs.getBool(PreferenceConfig.isFirstSignInPref) ?? true;
       if (shouldShowProfile) {
         emit(SplashNavigationState(Routes.profile));
       } else {
