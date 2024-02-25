@@ -36,8 +36,8 @@ class RoomItem extends StatelessWidget {
     final roomImage = roomInfo.roomImage;
 
     if (isOneToOne && receiverId != null) {
-      return StreamBuilder(
-        stream: roomBlocProvider.buildStreamOfUser(receiverId),
+      return FutureBuilder(
+        future: roomBlocProvider.getUser(receiverId),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             final receiverInfo = User.fromSnapshot(snapshot.data!);

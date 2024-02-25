@@ -105,6 +105,15 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         .snapshots();
   }
 
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUser(
+    String userId,
+  ) {
+    return _fireStoreInstance
+        .collection(FireStoreConfig.userCollection)
+        .doc(userId)
+        .get();
+  }
+
   Future<String?> _getCurrentUserId() async {
     final preference = await SharedPreferences.getInstance();
     return preference.getString(PreferenceConfig.userIdPref);

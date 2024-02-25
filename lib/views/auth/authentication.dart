@@ -108,7 +108,7 @@ class Authentication extends StatelessWidget {
               child: Text(
                 appLocalizations.googleSignIn,
                 style: TextStyle(
-                  fontSize: Dimens.dimens_18.sp,
+                  fontSize: Dimens.dimens_17.sp,
                   color: ColorUtils.getColor(
                     context,
                     ColorEnums.black1AColor,
