@@ -3,6 +3,7 @@
 A new chat app flutter project
 
 ## Getting Started
+FLutter version: 3.16.9
 
 This project is a starting point for a Flutter application.
 
