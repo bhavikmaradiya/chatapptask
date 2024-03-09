@@ -32,5 +32,6 @@ class Dimens {
   static const double dimens_342 = 342;
   static const double dimens_36 = 36;
   static const double dimens_170 = 170;
+  static const double dimens_100 = 100;
   static const double dimens_175 = 175;
 }

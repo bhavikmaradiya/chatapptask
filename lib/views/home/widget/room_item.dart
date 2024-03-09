@@ -6,6 +6,7 @@ import 'package:chatapp/utils/color_utils.dart';
 import 'package:chatapp/views/auth/model/room.dart';
 import 'package:chatapp/views/auth/model/user.dart';
 import 'package:chatapp/views/home/room_bloc/room_bloc.dart';
+import 'package:chatapp/views/home/widget/room_item_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,7 +40,12 @@ class RoomItem extends StatelessWidget {
       return FutureBuilder(
         future: roomBlocProvider.getUser(receiverId),
         builder: (context, snapshot) {
-          if (snapshot.data != null) {
+          debugPrint('profile fetch');
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const RoomItemSkeleton();
+          }
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.data != null) {
             final receiverInfo = User.fromSnapshot(snapshot.data!);
 
             return _buildRoomChatItem(

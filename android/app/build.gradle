@@ -25,7 +25,8 @@ if (flutterVersionName == null) {
 android {
     namespace "com.chatapp.chatapp"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+//    ndkVersion flutter.ndkVersion
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -64,4 +65,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+}

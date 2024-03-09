@@ -6,6 +6,7 @@ import 'package:chatapp/views/auth/model/room.dart';
 import 'package:chatapp/views/home/home_bloc/home_bloc.dart';
 import 'package:chatapp/views/home/room_bloc/room_bloc.dart';
 import 'package:chatapp/views/home/widget/room_item.dart';
+import 'package:chatapp/views/home/widget/room_item_skeleton.dart';
 import 'package:chatapp/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,7 +65,7 @@ class _HomeState extends State<Home> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: Dimens.dimens_10.w,
+                      vertical: Dimens.dimens_12.w,
                       horizontal: Dimens.dimens_20.w,
                     ),
                     child: Text(
@@ -119,6 +120,7 @@ class _HomeState extends State<Home> {
                               current is RoomLoadingState ||
                               current is RoomListUpdatedState),
                       builder: (context, state) {
+                        debugPrint('room bloc fetch $state');
                         var roomList = <Room>[];
                         if (state is RoomListUpdatedState &&
                             currentUserId != null) {
@@ -128,8 +130,13 @@ class _HomeState extends State<Home> {
                             child: Text(appLocalizations.noRoomsFound),
                           );
                         } else if (state is RoomLoadingState) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return ListView.builder(
+                            itemCount: 10,
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return const RoomItemSkeleton();
+                            },
                           );
                         }
                         return ListView.builder(
