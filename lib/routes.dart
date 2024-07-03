@@ -30,7 +30,7 @@ class Routes {
             ),
         profile: (_) => BlocProvider(
               create: (_) => ProfileBloc(),
-              child: const Profile(),
+              child: Profile(),
             ),
       };
 }

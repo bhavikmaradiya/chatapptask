@@ -18,6 +18,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc() : super(ProfileInitialState()) {
     on<ProfileInitialEvent>(_fetchProfile);
+    on<ProfileUpdateEvent>(_saveProfileInfo);
     add(ProfileInitialEvent());
   }
 
@@ -40,6 +41,41 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       photo: prefs.getString(PreferenceConfig.userPhotoPref),
     );
     emit(ProfileLoadedState(profileInfo));
+  }
+
+  Future<void> _saveProfileInfo(
+    ProfileUpdateEvent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(ProfileLoadingState());
+    final data = <String, dynamic>{};
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstLogin =
+        prefs.getBool(PreferenceConfig.isFirstSignInPref) ?? true;
+    final firebaseUserId = prefs.getString(PreferenceConfig.userIdPref);
+    final createdAt = DateTime.now().millisecondsSinceEpoch;
+    data[FireStoreConfig.userNameField] = event.name;
+    data[FireStoreConfig.userEmailField] = event.email;
+    data[FireStoreConfig.userPhotoField] = event.photo;
+    data[FireStoreConfig.userIdField] = firebaseUserId;
+    data[FireStoreConfig.updatedAtField] = createdAt;
+    if (isFirstLogin) {
+      data[FireStoreConfig.createdAtField] = createdAt;
+      await FirebaseFirestore.instance
+          .collection(FireStoreConfig.userCollection)
+          .doc(firebaseUserId)
+          .set(data);
+      await prefs.setBool(
+        PreferenceConfig.isFirstSignInPref,
+        false,
+      );
+    } else {
+      await FirebaseFirestore.instance
+          .collection(FireStoreConfig.userCollection)
+          .doc(firebaseUserId)
+          .update(data);
+    }
+    emit(ProfileUpdatedState());
   }
 
   Future<User?> _fetchProfileInfoFromFirebase() async {

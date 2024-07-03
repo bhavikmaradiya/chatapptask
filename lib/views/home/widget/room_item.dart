@@ -36,7 +36,7 @@ class RoomItem extends StatelessWidget {
     final roomName = roomInfo.roomName;
     final roomImage = roomInfo.roomImage;
 
-    if (isOneToOne && receiverId != null) {
+    if (receiverId != null) {
       return FutureBuilder(
         future: roomBlocProvider.getUser(receiverId),
         builder: (context, snapshot) {

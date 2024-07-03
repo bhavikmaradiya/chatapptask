@@ -23,14 +23,16 @@ class NotificationTokenHelper {
   }
 
   static void observeNotificationChange() {
-    FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
-      unawaited(
-        _updateFcmTokenToFirebase(
-          oldToken: _fcmToken,
-          newToken: token,
-        ),
-      );
-    });
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+      (token) async {
+        unawaited(
+          _updateFcmTokenToFirebase(
+            oldToken: _fcmToken,
+            newToken: token,
+          ),
+        );
+      },
+    );
   }
 
   static Future<void> _updateFcmTokenToFirebase({
@@ -42,11 +44,13 @@ class NotificationTokenHelper {
     if (firebaseUserId != null) {
       final profileInfo = await _fetchProfileInfoFromFirebase(firebaseUserId);
       if (profileInfo != null) {
-        unawaited(_updateFcmToken(
-          profileInfo,
-          oldToken: oldToken,
-          newToken: newToken,
-        ));
+        unawaited(
+          _updateFcmToken(
+            profileInfo,
+            oldToken: oldToken,
+            newToken: newToken,
+          ),
+        );
       }
     }
   }

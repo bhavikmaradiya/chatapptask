@@ -27,14 +27,16 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   ) async {
     emit(RoomLoadingState());
     final snapshotStream = await _getMyRoomsSnapshot();
-    _roomListSubscription = snapshotStream.listen((snapshot) async {
-      await _updateRoomInfo(snapshot);
-      if (_roomList.isEmpty) {
-        emit(RoomListEmptyState());
-      } else {
-        emit(RoomListUpdatedState(_roomList));
-      }
-    });
+    _roomListSubscription = snapshotStream.listen(
+      (snapshot) async {
+        await _updateRoomInfo(snapshot);
+        if (_roomList.isEmpty) {
+          emit(RoomListEmptyState());
+        } else {
+          emit(RoomListUpdatedState(_roomList));
+        }
+      },
+    );
     await _roomListSubscription?.asFuture();
   }
 

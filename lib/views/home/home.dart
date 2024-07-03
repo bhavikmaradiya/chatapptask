@@ -1,3 +1,4 @@
+import 'package:chatapp/const/assets.dart';
 import 'package:chatapp/const/dimens.dart';
 import 'package:chatapp/enums/color_enums.dart';
 import 'package:chatapp/notification/notification_token_helper.dart';
@@ -55,6 +56,21 @@ class _HomeState extends State<Home> {
         }
         return Scaffold(
           appBar: AppBar(toolbarHeight: 0),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: ColorUtils.getColor(
+              context,
+              ColorEnums.grayE0Color,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(
+                Dimens.dimens_15.r,
+              ),
+              child: Image.asset(
+                Assets.addIcon,
+              ),
+            ),
+          ),
           body: SafeArea(
             child: Container(
               margin: EdgeInsets.symmetric(

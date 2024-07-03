@@ -11,3 +11,5 @@ class ProfileLoadedState extends ProfileState {
 
   ProfileLoadedState(this.profileInfo);
 }
+
+class ProfileUpdatedState extends ProfileState {}

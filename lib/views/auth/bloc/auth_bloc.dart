@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chatapp/config/firestore_config.dart';
 import 'package:chatapp/config/preference_config.dart';
 import 'package:chatapp/utils/app_utils.dart';
@@ -30,7 +32,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     GoogleSignInEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final googleSignIn = GoogleSignIn();
+    final googleSignIn = GoogleSignIn(
+      clientId: Platform.isIOS
+          ? '568158172210-geeeh7mqpogl6lnc16558vctccgfrtnn.apps.googleusercontent.com'
+          : '568158172210-e0srmrj7gh2hgkcj6032252huq24khr7.apps.googleusercontent.com',
+    );
     final googleSignInAccount = await googleSignIn.signIn();
     if (googleSignInAccount != null) {
       final googleSignInAuthentication =

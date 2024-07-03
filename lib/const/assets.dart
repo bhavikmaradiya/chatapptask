@@ -3,4 +3,5 @@ class Assets {
   static const googleLogo = 'assets/png/google.png';
   static const userPlaceholder = 'assets/png/user_placeholder.png';
   static const doubleCheck = 'assets/png/double_check.png';
+  static const addIcon = 'assets/png/ic_add.png';
 }
